@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto - Clima por Ciudad</title>
+    <meta
+      name="description"
+      content="Contáctanos para sugerencias, soporte o colaboraciones en Clima por Ciudad."
+    />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Contacto - Clima por Ciudad" />
+    <meta
+      property="og:description"
+      content="Contáctanos para sugerencias, soporte o colaboraciones en Clima por Ciudad."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tusitio.com/contacto.html" />
+    <meta property="og:image" content="https://tusitio.com/imagen-clima.jpg" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contacto - Clima por Ciudad" />
+    <meta
+      name="twitter:description"
+      content="Contáctanos para sugerencias, soporte o colaboraciones en Clima por Ciudad."
+    />
+    <meta name="twitter:image" content="https://tusitio.com/imagen-clima.jpg" />
+    <!-- Datos estructurados JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "name": "Contacto - Clima por Ciudad",
+        "description": "Contáctanos para sugerencias, soporte o colaboraciones en Clima por Ciudad.",
+        "url": "https://tusitio.com/contacto.html"
+      }
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background: #f8fafc;
+        color: #1e293b;
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .container {
+        max-width: 700px;
+        margin: 3rem auto 1rem auto;
+        background: #fff;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        padding: 2.5rem 2rem 2rem 2rem;
+      }
+      h1 {
+        color: #3b82f6;
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        margin-bottom: 2rem;
+      }
+      label {
+        font-weight: 500;
+        color: #3b82f6;
+        margin-bottom: 0.3rem;
+      }
+      input,
+      textarea {
+        padding: 0.8rem 1rem;
+        border-radius: 0.75rem;
+        border: 1.5px solid #e2e8f0;
+        font-size: 1rem;
+        background: #f8fafc;
+        color: #1e293b;
+        resize: none;
+        transition: border 0.2s;
+      }
+      input:focus,
+      textarea:focus {
+        border: 1.5px solid #3b82f6;
+        outline: none;
+      }
+      .send-btn {
+        background: #3b82f6;
+        color: #fff;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 0.5rem;
+        width: fit-content;
+      }
+      .send-btn:hover {
+        background: #2563eb;
+      }
+      .back-btn {
+        display: inline-block;
+        background: #3b82f6;
+        color: #fff;
+        padding: 0.7rem 1.5rem;
+        border-radius: 0.75rem;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+      .back-btn:hover {
+        background: #2563eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1><i class="fas fa-envelope"></i> Contacto</h1>
+      <form autocomplete="off">
+        <div>
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="send-btn">
+          <i class="fas fa-paper-plane"></i> Enviar
+        </button>
+      </form>
+      <a href="index.html" class="back-btn"
+        ><i class="fas fa-arrow-left"></i> Volver al inicio</a
+      >
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Clima por Ciudad - Pronóstico del Tiempo Mundial en Tiempo Real
+    </title>
+    <meta
+      name="description"
+      content="Consulta el clima y pronóstico del tiempo en cualquier ciudad del mundo. Información meteorológica precisa, recomendaciones y más."
+    />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Clima por Ciudad - Pronóstico Mundial" />
+    <meta
+      property="og:description"
+      content="Consulta el clima y recibe recomendaciones personalizadas para cualquier ciudad."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tusitio.com/" />
+    <meta property="og:image" content="https://tusitio.com/imagen-clima.jpg" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Clima por Ciudad - Pronóstico Mundial"
+    />
+    <meta
+      name="twitter:description"
+      content="Consulta el clima y recibe recomendaciones personalizadas para cualquier ciudad."
+    />
+    <meta name="twitter:image" content="https://tusitio.com/imagen-clima.jpg" />
+    <!-- Datos estructurados JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Clima por Ciudad",
+        "url": "https://tusitio.com/"
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        /* Light theme */
+        --color-bg: #f8fafc;
+        --color-text: #1e293b;
+        --color-card: #ffffff;
+        --color-accent: #3b82f6;
+        --color-secondary: #64748b;
+        --color-border: #e2e8f0;
+        --color-hover: #f1f5f9;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      [data-theme="dark"] {
+        --color-bg: #0f172a;
+        --color-text: #f1f5f9;
+        --color-card: #1e293b;
+        --color-accent: #60a5fa;
+        --color-secondary: #94a3b8;
+        --color-border: #334155;
+        --color-hover: #1e293b;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        padding: 2rem;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .language-selector {
+        position: relative;
+        display: inline-block;
+      }
+
+      .language-button {
+        background: none;
+        border: none;
+        color: var(--color-text);
+        cursor: pointer;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .language-button:hover {
+        background-color: var(--color-hover);
+      }
+
+      .language-dropdown {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: var(--color-card);
+        border-radius: 0.75rem;
+        box-shadow: var(--shadow-lg);
+        padding: 0.5rem;
+        margin-top: 0.5rem;
+        display: none;
+        z-index: 100;
+        min-width: 150px;
+      }
+
+      .language-dropdown.active {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+      }
+
+      .language-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+      }
+
+      .language-option:hover {
+        background-color: var(--color-hover);
+      }
+
+      .language-option.active {
+        background-color: var(--color-accent);
+        color: white;
+      }
+
+      h1 {
+        font-size: 2rem;
+        color: var(--color-accent);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        color: var(--color-text);
+        cursor: pointer;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+      }
+
+      .theme-toggle:hover {
+        background-color: var(--color-hover);
+      }
+
+      .search-container {
+        position: relative;
+        margin-bottom: 2rem;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        border: 2px solid var(--color-border);
+        background-color: var(--color-card);
+        color: var(--color-text);
+        font-size: 1rem;
+        transition: all 0.3s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .search-button {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--color-accent);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s;
+      }
+
+      .search-button:hover {
+        background-color: #2563eb;
+      }
+
+      .suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--color-card);
+        border-radius: 0.75rem;
+        margin-top: 0.5rem;
+        box-shadow: var(--shadow-lg);
+        z-index: 10;
+        display: none;
+      }
+
+      .suggestions.active {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+      }
+
+      .suggestion-group {
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .suggestion-group:last-child {
+        border-bottom: none;
+      }
+
+      .suggestion-country {
+        padding: 0.5rem 1rem;
+        background-color: var(--color-hover);
+        font-weight: 600;
+        color: var(--color-accent);
+      }
+
+      .suggestion-item {
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .suggestion-item:hover {
+        background-color: var(--color-hover);
+      }
+
+      .suggestion-item i {
+        color: var(--color-accent);
+        width: 20px;
+        text-align: center;
+      }
+
+      .suggestion-item small {
+        margin-left: auto;
+        color: var(--color-secondary);
+        font-size: 0.8rem;
+        text-transform: capitalize;
+      }
+
+      .weather-card {
+        background-color: var(--color-card);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        margin-top: 1rem;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .weather-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .weather-main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .weather-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .weather-temp {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--color-accent);
+      }
+
+      .weather-condition {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.25rem;
+      }
+
+      .forecast {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .forecast-day {
+        background: var(--color-card);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.3s;
+      }
+
+      .forecast-day:hover {
+        transform: translateY(-5px);
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .loading.active {
+        display: block;
+        animation: pulse 1.5s infinite;
+      }
+
+      .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--color-border);
+        border-top: 4px solid var(--color-accent);
+        border-radius: 50%;
+        margin: 0 auto;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.6;
+        }
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 1rem;
+        }
+
+        .weather-main {
+          grid-template-columns: 1fr;
+        }
+
+        .forecast {
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+      }
+
+      .suggestion-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .suggestion-name {
+        font-weight: 500;
+      }
+
+      .suggestion-tags,
+      .suggestion-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+      }
+
+      .tag,
+      .feature {
+        font-size: 0.75rem;
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.25rem;
+        background-color: var(--color-hover);
+        color: var(--color-secondary);
+      }
+
+      .tag {
+        background-color: var(--color-accent);
+        color: white;
+      }
+
+      .feature {
+        background-color: var(--color-hover);
+        color: var(--color-text);
+      }
+
+      .main-footer {
+        background: var(--color-card);
+        color: var(--color-secondary);
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+        padding: 2rem 0 1rem 0;
+        margin-top: 3rem;
+        border-radius: 1.5rem;
+        width: 100%;
+      }
+      .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .footer-links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 1rem;
+      }
+      .footer-link {
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .footer-link:hover {
+        color: var(--color-text);
+        text-decoration: underline;
+      }
+      .footer-sep {
+        color: var(--color-border);
+        font-weight: 700;
+        margin: 0 0.25rem;
+      }
+      .footer-copy {
+        font-size: 0.95rem;
+        color: var(--color-secondary);
+        margin-top: 0.5rem;
+      }
+      @media (max-width: 640px) {
+        .main-footer {
+          padding: 1.5rem 0 0.5rem 0;
+        }
+        .footer-content {
+          padding: 0 1rem;
+        }
+        .footer-links {
+          font-size: 0.95rem;
+        }
+      }
+      .recomendacion-nota {
+        margin: 1.5rem auto 0 auto;
+        padding: 1.1rem 2rem;
+        border-radius: 1rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-align: center;
+        max-width: 500px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        color: white;
+        display: none;
+        letter-spacing: 0.01em;
+        transition: background 0.3s, color 0.3s;
+      }
+      .recomendacion-nota.naranja {
+        background: linear-gradient(90deg, #ff9800 60%, #ffb74d 100%);
+        color: #fff;
+      }
+      .recomendacion-nota.celeste {
+        background: linear-gradient(90deg, #03a9f4 60%, #81d4fa 100%);
+        color: #fff;
+      }
+      .recomendacion-nota.verde {
+        background: linear-gradient(90deg, #43a047 60%, #a5d6a7 100%);
+        color: #fff;
+      }
+      .seo-section {
+        margin: 2.5rem 0 1.5rem 0;
+        background: var(--color-card);
+        border-radius: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        padding: 1.5rem 2rem;
+        color: var(--color-text);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .seo-section h2 {
+        color: var(--color-accent);
+        font-size: 1.3rem;
+        margin-bottom: 0.7rem;
+      }
+      .seo-section ul {
+        margin-left: 1.2rem;
+        margin-bottom: 0;
+      }
+      .seo-section li {
+        margin-bottom: 0.4rem;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><i class="fas fa-cloud-sun"></i> Clima por Ciudad</h1>
+        <div class="header-controls">
+          <div class="language-selector">
+            <button class="language-button" onclick="toggleLanguageDropdown()">
+              <i class="fas fa-globe"></i>
+              <span class="current-language">ES</span>
+            </button>
+            <div id="languageDropdown" class="language-dropdown">
+              <div
+                class="language-option active"
+                onclick="changeLanguage('es')"
+              >
+                <span>🇪🇸</span>
+                <span>Español</span>
+              </div>
+              <div class="language-option" onclick="changeLanguage('en')">
+                <span>🇬🇧</span>
+                <span>English</span>
+              </div>
+              <div class="language-option" onclick="changeLanguage('ja')">
+                <span>🇯🇵</span>
+                <span>日本語</span>
+              </div>
+            </div>
+          </div>
+          <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <input
+          type="text"
+          id="ciudadInput"
+          class="search-input"
+          placeholder="Ingresa una ciudad..."
+          oninput="showSuggestions()"
+        />
+        <button class="search-button" onclick="buscarClima()">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+
+      <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>Cargando información del clima...</p>
+      </div>
+
+      <div id="resultado" class="weather-card" style="display: none"></div>
+      <div
+        id="recomendacion"
+        class="recomendacion-nota"
+        style="display: none"
+      ></div>
+      <div id="pronostico" class="forecast"></div>
+
+      <footer class="main-footer">
+        <div class="footer-content">
+          <div class="footer-links">
+            <a href="terminos.html" class="footer-link"
+              >Términos y condiciones</a
+            >
+            <span class="footer-sep">|</span>
+            <a href="about.html" class="footer-link">About</a>
+            <span class="footer-sep">|</span>
+            <a href="contacto.html" class="footer-link">Contacto</a>
+          </div>
+          <div class="footer-copy">&copy; 2024 Clima por Ciudad</div>
+        </div>
+      </footer>
+
+      <!-- Bloque SEO: ¿Cómo funciona? -->
+      <section class="seo-section">
+        <h2>¿Cómo funciona Clima por Ciudad?</h2>
+        <p>
+          Consulta el <strong>pronóstico del tiempo</strong> en cualquier ciudad
+          del mundo de forma rápida y sencilla. Nuestra aplicación te ofrece
+          información meteorológica precisa, recomendaciones personalizadas y
+          consejos útiles para tu día a día según el clima actual. ¡Descubre el
+          clima en tu ciudad, país o cualquier destino internacional!
+        </p>
+      </section>
+      <!-- Bloque SEO: Ventajas -->
+      <section class="seo-section">
+        <h2>Ventajas de usar Clima por Ciudad</h2>
+        <ul>
+          <li>
+            Pronóstico extendido y actualizado para cualquier ciudad o país.
+          </li>
+          <li>
+            Recomendaciones personalizadas según la temperatura y condiciones.
+          </li>
+          <li>
+            Interfaz moderna, rápida y fácil de usar desde cualquier
+            dispositivo.
+          </li>
+          <li>Soporte multilingüe: español, inglés y japonés.</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Google AdSense placeholder -->
+    <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX" data-ad-format="auto"></ins> -->
+
+    <script>
+      const apiKey = "2dcff7620ef44e9ea9f204911252705";
+      let currentLanguage = "es"; // Inicializar el idioma por defecto
+
+      const translations = {
+        es: {
+          title: "Clima por Ciudad",
+          searchPlaceholder: "Ingresa una ciudad...",
+          searchButton: "Buscar",
+          loading: "Cargando información del clima...",
+          error: "No se pudo obtener el clima. Verifica la ciudad.",
+          temperature: "Temperatura",
+          condition: "Condición",
+          wind: "Viento",
+          humidity: "Humedad",
+          pressure: "Presión",
+          city: "ciudad",
+          district: "distrito",
+        },
+        en: {
+          title: "Weather by City",
+          searchPlaceholder: "Enter a city...",
+          searchButton: "Search",
+          loading: "Loading weather information...",
+          error: "Could not get weather. Please check the city.",
+          temperature: "Temperature",
+          condition: "Condition",
+          wind: "Wind",
+          humidity: "Humidity",
+          pressure: "Pressure",
+          city: "city",
+          district: "district",
+        },
+        ja: {
+          title: "都市の天気",
+          searchPlaceholder: "都市を入力...",
+          searchButton: "検索",
+          loading: "天気情報を読み込み中...",
+          error: "天気情報を取得できませんでした。都市を確認してください。",
+          temperature: "気温",
+          condition: "天気",
+          wind: "風",
+          humidity: "湿度",
+          pressure: "気圧",
+          city: "都市",
+          district: "地区",
+        },
+      };
+
+      // Función para inicializar el idioma
+      function initializeLanguage() {
+        const t = translations[currentLanguage];
+        document.querySelector(
+          "h1"
+        ).innerHTML = `<i class="fas fa-cloud-sun"></i> ${t.title}`;
+        document.getElementById("ciudadInput").placeholder =
+          t.searchPlaceholder;
+        document.querySelector(
+          ".search-button"
+        ).innerHTML = `<i class="fas fa-search"></i> ${t.searchButton}`;
+        document.querySelector(".loading p").textContent = t.loading;
+        document.querySelector(".current-language").textContent =
+          currentLanguage.toUpperCase();
+      }
+
+      // Llamar a la inicialización cuando se carga la página
+      document.addEventListener("DOMContentLoaded", initializeLanguage);
+
+      function toggleTheme() {
+        const body = document.body;
+        const theme = body.getAttribute("data-theme");
+        const icon = document.querySelector(".theme-toggle i");
+
+        if (theme === "dark") {
+          body.removeAttribute("data-theme");
+          icon.classList.remove("fa-sun");
+          icon.classList.add("fa-moon");
+        } else {
+          body.setAttribute("data-theme", "dark");
+          icon.classList.remove("fa-moon");
+          icon.classList.add("fa-sun");
+        }
+      }
+
+      function normalizeText(text) {
+        return text
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-z0-9\s]/g, "");
+      }
+
+      function calculateRelevance(location, searchTerms) {
+        let score = 0;
+        const normalizedName = normalizeText(location.name);
+        const normalizedCountry = normalizeText(location.country);
+        const normalizedType = normalizeText(location.type);
+        const normalizedTags = location.tags
+          ? location.tags.map((tag) => normalizeText(tag))
+          : [];
+        const normalizedFeatures = location.features
+          ? location.features.map((feature) => normalizeText(feature))
+          : [];
+
+        searchTerms.forEach((term) => {
+          // Coincidencia exacta en nombre
+          if (normalizedName === term) score += 100;
+          // Coincidencia exacta en país
+          else if (normalizedCountry === term) score += 80;
+          // Coincidencia parcial en nombre
+          else if (normalizedName.includes(term)) score += 50;
+          // Coincidencia en tags
+          else if (normalizedTags.includes(term)) score += 30;
+          // Coincidencia en características
+          else if (normalizedFeatures.includes(term)) score += 20;
+          // Coincidencia en tipo
+          else if (normalizedType === term) score += 10;
+        });
+
+        return score;
+      }
+
+      function showSuggestions() {
+        const input = document.getElementById("ciudadInput");
+        const suggestions = document.getElementById("suggestions");
+        const value = input.value.trim();
+
+        if (value.length < 2) {
+          suggestions.classList.remove("active");
+          return;
+        }
+
+        // Dividir la búsqueda en términos individuales
+        const searchTerms = value
+          .toLowerCase()
+          .split(/\s+/)
+          .map((term) => normalizeText(term));
+
+        // Filtrar y ordenar ubicaciones por relevancia
+        const filtered = suggestedLocations
+          .map((loc) => ({
+            ...loc,
+            relevance: calculateRelevance(loc, searchTerms),
+          }))
+          .filter((loc) => loc.relevance > 0)
+          .sort((a, b) => b.relevance - a.relevance);
+
+        if (filtered.length > 0) {
+          // Agrupar por país
+          const groupedByCountry = filtered.reduce((acc, loc) => {
+            if (!acc[loc.country]) {
+              acc[loc.country] = [];
+            }
+            acc[loc.country].push(loc);
+            return acc;
+          }, {});
+
+          // Crear HTML para las sugerencias agrupadas
+          suggestions.innerHTML = Object.entries(groupedByCountry)
+            .map(
+              ([country, locations]) => `
+              <div class="suggestion-group">
+                <div class="suggestion-country">
+                  <span>${locations[0].icon} ${country}</span>
+                </div>
+                ${locations
+                  .map(
+                    (loc) => `
+                  <div class="suggestion-item" onclick="selectLocation('${
+                    loc.name
+                  }, ${loc.country}')">
+                    <i class="fas ${
+                      loc.type === "ciudad" ? "fa-city" : "fa-map-marker-alt"
+                    }"></i>
+                    <div class="suggestion-content">
+                      <span class="suggestion-name">${loc.name}</span>
+                      <div class="suggestion-tags">
+                        ${
+                          loc.tags
+                            ? loc.tags
+                                .map((tag) => `<span class="tag">${tag}</span>`)
+                                .join("")
+                            : ""
+                        }
+                      </div>
+                      <div class="suggestion-features">
+                        ${
+                          loc.features
+                            ? loc.features
+                                .map(
+                                  (feature) =>
+                                    `<span class="feature">${feature}</span>`
+                                )
+                                .join("")
+                            : ""
+                        }
+                      </div>
+                    </div>
+                    <small>${loc.type}</small>
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+            `
+            )
+            .join("");
+
+          suggestions.classList.add("active");
+        } else {
+          suggestions.classList.remove("active");
+        }
+      }
+
+      function selectLocation(location) {
+        document.getElementById("ciudadInput").value = location;
+        document.getElementById("suggestions").classList.remove("active");
+        buscarClima();
+      }
+
+      function toggleLanguageDropdown() {
+        const dropdown = document.getElementById("languageDropdown");
+        dropdown.classList.toggle("active");
+      }
+
+      function changeLanguage(lang) {
+        if (lang === currentLanguage) return; // No hacer nada si es el mismo idioma
+
+        currentLanguage = lang;
+        const t = translations[lang];
+
+        // Actualizar textos
+        document.querySelector(
+          "h1"
+        ).innerHTML = `<i class="fas fa-cloud-sun"></i> ${t.title}`;
+        document.getElementById("ciudadInput").placeholder =
+          t.searchPlaceholder;
+        document.querySelector(
+          ".search-button"
+        ).innerHTML = `<i class="fas fa-search"></i> ${t.searchButton}`;
+        document.querySelector(".loading p").textContent = t.loading;
+
+        // Actualizar selector de idioma
+        document.querySelector(".current-language").textContent =
+          lang.toUpperCase();
+        document.querySelectorAll(".language-option").forEach((option) => {
+          option.classList.remove("active");
+          if (option.getAttribute("onclick").includes(lang)) {
+            option.classList.add("active");
+          }
+        });
+
+        // Cerrar el dropdown
+        document.getElementById("languageDropdown").classList.remove("active");
+
+        // Si hay una ciudad seleccionada, actualizar el clima
+        const ciudad = document.getElementById("ciudadInput").value.trim();
+        if (ciudad) {
+          buscarClima();
+        }
+      }
+
+      function buscarClima() {
+        const ciudad = document.getElementById("ciudadInput").value.trim();
+        if (!ciudad) return;
+
+        const loading = document.getElementById("loading");
+        const resultado = document.getElementById("resultado");
+
+        loading.classList.add("active");
+        resultado.style.display = "none";
+
+        // Pedimos 10 días para asegurar cubrir la semana actual
+        const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${ciudad}&days=10&lang=${currentLanguage}`;
+
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            loading.classList.remove("active");
+            resultado.style.display = "block";
+            mostrarClima(data);
+          })
+          .catch(() => {
+            loading.classList.remove("active");
+            alert(translations[currentLanguage].error);
+          });
+      }
+
+      function getCurrentWeekDates() {
+        // Devuelve un array de fechas (YYYY-MM-DD) de domingo a sábado de la semana actual
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0=domingo, 6=sábado
+        const sunday = new Date(today);
+        sunday.setDate(today.getDate() - dayOfWeek);
+        const weekDates = [];
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(sunday);
+          d.setDate(sunday.getDate() + i);
+          weekDates.push(d.toISOString().slice(0, 10));
+        }
+        return weekDates;
+      }
+
+      function mostrarClima(data) {
+        const t = translations[currentLanguage];
+        const resultado = document.getElementById("resultado");
+        const pronostico = document.getElementById("pronostico");
+        const recomendacion = document.getElementById("recomendacion");
+
+        resultado.innerHTML = `
+          <div class="weather-header">
+            <h2>${data.location.name}, ${data.location.country}</h2>
+            <span class="weather-date">${new Date().toLocaleDateString(
+              currentLanguage === "ja"
+                ? "ja-JP"
+                : currentLanguage === "en"
+                ? "en-US"
+                : "es-ES",
+              {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            )}</span>
+          </div>
+          <div class="weather-main">
+            <div class="weather-info">
+              <div class="weather-temp">${data.current.temp_c}°C</div>
+              <div class="weather-condition">
+                <img src="${data.current.condition.icon}" alt="Icono de clima ${
+          data.current.condition.text
+        } en ${data.location.name}, ${data.location.country}" width="32">
+                <span>${data.current.condition.text}</span>
+              </div>
+            </div>
+            <div class="weather-details">
+              <p><i class="fas fa-wind"></i> ${t.wind}: ${
+          data.current.wind_kph
+        } km/h</p>
+              <p><i class="fas fa-tint"></i> ${t.humidity}: ${
+          data.current.humidity
+        }%</p>
+              <p><i class="fas fa-compress-arrows-alt"></i> ${t.pressure}: ${
+          data.current.pressure_mb
+        } mb</p>
+            </div>
+          </div>
+        `;
+
+        // Mostrar recomendación según la temperatura
+        let temp = data.current.temp_c;
+        let mensaje = "";
+        let color = "";
+        if (temp >= 27) {
+          mensaje =
+            currentLanguage === "en"
+              ? "It's very hot, wear light clothes and stay hydrated."
+              : currentLanguage === "ja"
+              ? "とても暑いので、軽い服装で水分補給を忘れずに。"
+              : "Hace mucho calor, usa ropa ligera y mantente hidratado.";
+          color = "naranja";
+        } else if (temp <= 15) {
+          mensaje =
+            currentLanguage === "en"
+              ? "It's cold, wear warm clothes."
+              : currentLanguage === "ja"
+              ? "寒いので、暖かい服装を着てください。"
+              : "Hace frío, usa ropa abrigadora.";
+          color = "celeste";
+        } else {
+          mensaje =
+            currentLanguage === "en"
+              ? "The weather is pleasant, dress comfortably."
+              : currentLanguage === "ja"
+              ? "快適な気候です。快適な服装でお過ごしください。"
+              : "El clima es agradable, viste cómodo.";
+          color = "verde";
+        }
+        recomendacion.textContent = mensaje;
+        recomendacion.className = `recomendacion-nota ${color}`;
+        recomendacion.style.display = "block";
+
+        pronostico.style.display = "grid";
+        pronostico.style.gridTemplateColumns =
+          "repeat(auto-fit, minmax(120px, 1fr))";
+        pronostico.style.gap = "1rem";
+        pronostico.style.marginTop = "2rem";
+
+        // Filtrar los días de la semana actual (domingo a sábado)
+        const weekDates = getCurrentWeekDates();
+        const forecastDays = data.forecast.forecastday.filter((day) =>
+          weekDates.includes(day.date)
+        );
+
+        pronostico.innerHTML = forecastDays
+          .map(
+            (dia) => `
+          <div class="forecast-day">
+            <h4>${new Date(dia.date).toLocaleDateString(
+              currentLanguage === "ja"
+                ? "ja-JP"
+                : currentLanguage === "en"
+                ? "en-US"
+                : "es-ES",
+              {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+              }
+            )}</h4>
+            <img src="${dia.day.condition.icon}" alt="Icono de clima ${
+              dia.day.condition.text
+            } en ${data.location.name}, ${data.location.country}" width="48">
+            <div class="forecast-temp">
+              <span class="max">${dia.day.maxtemp_c}°</span>
+              <span class="min">${dia.day.mintemp_c}°</span>
+            </div>
+            <small>${dia.day.condition.text}</small>
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      // Close suggestions when clicking outside
+      document.addEventListener("click", (e) => {
+        const suggestions = document.getElementById("suggestions");
+        const searchContainer = document.querySelector(".search-container");
+
+        if (!searchContainer.contains(e.target)) {
+          suggestions.classList.remove("active");
+        }
+      });
+
+      // Cerrar el dropdown de idiomas al hacer clic fuera
+      document.addEventListener("click", (e) => {
+        const languageSelector = document.querySelector(".language-selector");
+        const dropdown = document.getElementById("languageDropdown");
+        if (!languageSelector.contains(e.target)) {
+          dropdown.classList.remove("active");
+        }
+      });
+    </script>
+  </body>
+</html>
